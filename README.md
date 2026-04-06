@@ -9,6 +9,10 @@ DiskMINT-Nursery is a companion skill for AI agents such as [Claude Code](https:
 
 ---
 
+DiskMINT-Nursery is described inside the DiskMINT [Documentation](https://diskmint.readthedocs.io/en/latest/). Check the `AI Features` section in the documentation for more information.
+
+---
+
 ## Features
 
 ### 🌱 Feature 1 — Installation & Onboarding
