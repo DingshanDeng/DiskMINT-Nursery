@@ -66,6 +66,20 @@ missing or misconfigured tool.
 Read `$DISKMINT_REF/install_reference.md`, then follow the step-by-step procedure in
 [references/install_mode.md](references/install_mode.md).
 
+Check these in order:
+1. **conda** — is conda installed? (`conda --version`). If not, direct the user to
+   https://docs.anaconda.com/miniconda/ to install Miniconda first.
+2. **conda environment** — is a dedicated (non-base) conda environment active?
+   Check: `echo $CONDA_DEFAULT_ENV` — if empty or `base`, no dedicated env is active.
+   Ask the user what name they prefer for the environment; if they have no preference,
+   suggest `diskmint_stable`. Then create and activate it:
+   `conda create -n <env_name> python=3.11 && conda activate <env_name>`
+3. **DiskMINT Python package** — `python -c "import diskmint.model; print('OK')"`
+4. **Fortran chemistry + DISKMINT_BIN_DIR** — `$DISKMINT_BIN_DIR/disk_main` exists
+5. **RADMC-3D** — `radmc3d info`
+6. **gfortran 10+** — `gfortran --version`
+7. **optool** — `optool --version` (optional)
+
 ---
 
 ## Mode 2 — Runtime Assistant
