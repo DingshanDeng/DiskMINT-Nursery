@@ -7,6 +7,9 @@
 
 DiskMINT-Nursery is a companion skill for AI agents such as [Claude Code](https://claude.ai/code) and [OpenAI Codex](https://developers.openai.com/codex/cli) that guides users through the full DiskMINT workflow — from first install to scientific results. It works by reading structured reference files from the DiskMINT documentation and using them to navigate and assist in the user's own project.
 
+> [!TIP]
+> A useful link for students/educators is the [GitHub Edication](https://github.com/education), where you can register and have access (free as in March 2026) to [GitHub Copilot](https://github.com/features/copilot/cli) that provide access to the latest models by both Claude and Codex.
+
 ---
 
 DiskMINT-Nursery is described inside the DiskMINT [Documentation](https://diskmint.readthedocs.io/en/latest/). Check the `AI Features` section in the documentation for more information.
