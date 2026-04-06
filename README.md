@@ -5,7 +5,7 @@
 > [!WARNING]
 > **DiskMINT-Nursery is in early development. All features listed below are experimental and subject to change.**
 
-DiskMINT-Nursery is a companion skill for AI agent such as [Claude Code](https://claude.ai/code) and [Codex](https://developers.openai.com/codex/cli) (with planned support for GitHub Copilot and other AI coding assistants) that guides users through the full DiskMINT workflow — from first install to scientific results. It works by reading structured reference files from the DiskMINT documentation and using them to navigate and assist in the user's own project.
+DiskMINT-Nursery is a companion skill for AI agents such as [Claude Code](https://claude.ai/code) and [OpenAI Codex](https://developers.openai.com/codex/cli) that guides users through the full DiskMINT workflow — from first install to scientific results. It works by reading structured reference files from the DiskMINT documentation and using them to navigate and assist in the user's own project.
 
 ---
 
@@ -68,11 +68,13 @@ make install
 
 `make install` will:
 1. Detect your local DiskMINT installation and find the AI reference files
-2. Inject the correct path into the skill file
-3. Copy the skill to `~/.claude/skills/diskmint-nursery/`
+2. Make the skill available to Claude Code and Codex
+3. Copy the skill to `~/.claude/skills/diskmint-nursery/` and `~/.codex/skills/diskmint-nursery/`
 
-Then restart Claude Code. The skill activates automatically when you mention DiskMINT,
-or you can invoke it directly with `/diskmint-nursery`.
+If you only want one platform, use `make install-claude` or `make install-codex` instead.
+
+Then restart Claude Code or Codex. The skill activates automatically when you mention DiskMINT.
+In Claude Code, you can also invoke it directly with `/diskmint-nursery`.
 
 To remove the skill:
 ```bash
@@ -84,7 +86,8 @@ make uninstall
 ## Requirements
 
 - [DiskMINT](https://github.com/DingshanDeng/DiskMINT) installed on your machine
-- [Claude Code](https://claude.ai/code) (primary supported platform)
+- [Claude Code](https://claude.ai/code)
+- [OpenAI Codex](https://developers.openai.com/codex/cli)
 
 ---
 

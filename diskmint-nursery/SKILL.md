@@ -1,14 +1,13 @@
 ---
 name: diskmint-nursery
-description: AI assistant for DiskMINT — a Python3-Fortran thermochemical protoplanetary disk modeling package built on RADMC-3D. Activate whenever the user mentions DiskMINT, asks about disk modeling with RADMC-3D, C18O or CO chemistry, wants to install or configure DiskMINT, encounters errors running disk models, imports diskmint in their code, asks about dust opacities with optool, running VHSE iterations, or interpreting .chem output files. Provides guided installation and environment setup, runtime assistance for model configuration and output interpretation, and support escalation with error diagnosis and email drafting.
+description: AI assistant specifically for DiskMINT — a Python3-Fortran thermochemical protoplanetary disk modeling package built on RADMC-3D. Activate ONLY when the user explicitly mentions DiskMINT by name, references the diskmint Python package (e.g. import diskmint), or directly asks for DiskMINT help. Do NOT activate for generic disk modeling questions about RADMC-3D, VHSE, CO chemistry, or dust opacities unless the user specifically says DiskMINT — other users may be working with different codes such as DALI, ProDiMo, or ANDES. Provides guided installation and environment setup, runtime assistance for model configuration and output interpretation, and support escalation with error diagnosis and email drafting. Compatible with Claude Code, OpenAI Codex, and other AI coding agents that support skill files.
 license: MIT
-compatibility: Designed for Claude Code. Requires DiskMINT to be installed and importable. Requires Bash, Read, and Edit tools.
+compatibility: Designed for Claude Code and OpenAI Codex. Requires DiskMINT to be installed and importable. Requires Bash, Read, and Edit tools.
 metadata:
   author: Dingshan Deng
   email: dingshandeng@gmail.com
   version: 0.1.0-experimental
   repository: https://github.com/DingshanDeng/DiskMINT-Nursery
-allowed-tools: Bash Read Edit
 ---
 
 # DiskMINT-Nursery
@@ -30,7 +29,20 @@ print(ref if os.path.isdir(ref) else 'NOT_FOUND')
 ```
 
 Store the result as `DISKMINT_REF`. If `NOT_FOUND`, tell the user to update DiskMINT to a
-version that includes the AI Features docs, and fall back to https://diskmint.readthedocs.io.
+version that includes the AI Features docs. In the meantime, fetch the reference files
+directly from the GitHub repository instead:
+
+```
+DISKMINT_REF_BASE = https://github.com/DingshanDeng/DiskMINT/tree/main/docs/source
+```
+
+Particularly the AI reference files in `AI Features`:
+
+```
+https://github.com/DingshanDeng/DiskMINT/tree/v1.6.3%2B_DiskMINT-GARDEN_n_Better_Demos/docs/source/AI%20Features
+```
+
+You can also try to fall back to diskmint.readthedocs.io, specifically the [diskmint.readthedocs.io](https://diskmint.readthedocs.io/en/v1.6.3_diskmint-garden_n_better_demos/AI%20Features/ai_ref_index.html).
 
 **Before answering any question**, read the relevant file from `DISKMINT_REF`:
 
@@ -42,7 +54,7 @@ version that includes the AI Features docs, and fall back to https://diskmint.re
 | Output files / `.chem` columns | `output_format_reference.md` |
 | Errors / crashes | `error_reference.md` |
 
-Always prefer these files over general knowledge about RADMC-3D or disk modeling.
+Always prefer these files over general knowledge about RADMC-3D or disk modeling if a question about DiskMINT is asked.
 
 ---
 
@@ -92,6 +104,10 @@ If unresolved, follow [references/escalation_template.md](references/escalation_
 - Never guess a parameter value or file format — read the relevant reference file first.
 - Never run `sudo` commands autonomously — print them for the user to copy-paste.
 - Never modify the user's parameter CSV without showing a diff and asking for confirmation.
-- If a reference file says "under construction", note this and fall back to
-  https://diskmint.readthedocs.io.
+- If a reference file says "under construction", note this and fetch the latest version
+  from GitHub (see Setup section above for the raw URL base).
 - If unsure which mode applies, ask one clarifying question before proceeding.
+- If an issue cannot be resolved after consulting all reference files and trying all
+  suggested fixes, tell the user: "I was not able to resolve this. Please open an issue
+  at https://github.com/DingshanDeng/DiskMINT/issues or contact the author directly at
+  dingshandeng@gmail.com with a description of the problem and your environment details."

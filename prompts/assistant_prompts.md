@@ -4,7 +4,7 @@
 > These prompts are under development. Contents will be added in an upcoming release.
 
 Prepared prompts for **Feature 2 — Runtime Assistant**.
-Use these with Claude Code (or another supported AI assistant) to get help running and interpreting DiskMINT models.
+Use these with a supported AI assistant, for example Claude Code or OpenAI Codex, to get help running and interpreting DiskMINT models.
 
 ---
 

@@ -4,7 +4,7 @@
 > These prompts are under development. Contents will be added in an upcoming release.
 
 Prepared prompts for **Feature 3 — Support Escalation**.
-Use these with Claude Code (or another supported AI assistant) when something goes wrong and you need help diagnosing an error or contacting the DiskMINT author.
+Use these with a supported AI assistant, for example Claude Code or OpenAI Codex, when something goes wrong and you need help diagnosing an error or contacting the DiskMINT author.
 
 ---
 
