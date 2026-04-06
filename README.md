@@ -7,6 +7,8 @@
 
 DiskMINT-Nursery is a companion skill for AI agents such as [Claude Code](https://claude.ai/code) and [OpenAI Codex](https://developers.openai.com/codex/cli) that guides users through the full DiskMINT workflow — from first install to scientific results. It works by reading structured reference files from the DiskMINT documentation and using them to navigate and assist in the user's own project.
 
+DiskMINT-Nursery works the best with the command line interface (CLI).
+
 > [!TIP]
 > A useful link for students/educators is the [GitHub Edication](https://github.com/education), where you can register and have access (free as in March 2026) to [GitHub Copilot](https://github.com/features/copilot/cli) that provide access to the latest models by both Claude and Codex.
 
@@ -65,13 +67,16 @@ A set of ready-to-use prompts for each feature is maintained in the [`prompts/`]
 > [!WARNING]
 > The skill is experimental. Install at your own discretion.
 
-**Prerequisites:** DiskMINT must already be installed and importable (`import diskmint`).
-
 ```bash
 git clone https://github.com/DingshanDeng/DiskMINT-Nursery.git
 cd DiskMINT-Nursery
 make install
 ```
+
+> [!TIP]
+> You can open your agent CLI inside the cloned repo, 
+> and just ask your code agent to install the DiskMINT-Nursery skill
+> say something like "Install DiskMINT-Nursery that is inside this repo"
 
 `make install` will:
 1. Detect your local DiskMINT installation and find the AI reference files
@@ -93,8 +98,10 @@ make uninstall
 ## Requirements
 
 - [DiskMINT](https://github.com/DingshanDeng/DiskMINT) installed on your machine
-- [Claude Code](https://claude.ai/code)
-- [OpenAI Codex](https://developers.openai.com/codex/cli)
+- An code agent CLI, for example:
+  - [Claude Code](https://claude.ai/code)
+  - [OpenAI Codex](https://developers.openai.com/codex/cli)
+  - [GitHub Copilot CLI](https://github.com/features/copilot/cli)
 
 ---
 
