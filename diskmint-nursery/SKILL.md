@@ -2,11 +2,10 @@
 name: diskmint-nursery
 description: AI assistant specifically for DiskMINT — a Python3-Fortran thermochemical protoplanetary disk modeling package built on RADMC-3D. Activate ONLY when the user explicitly mentions DiskMINT by name, references the diskmint Python package (e.g. import diskmint), or directly asks for DiskMINT help. Do NOT activate for generic disk modeling questions about RADMC-3D, VHSE, CO chemistry, or dust opacities unless the user specifically says DiskMINT — other users may be working with different codes such as DALI, ProDiMo, or ANDES. Provides guided installation and environment setup, runtime assistance for model configuration and output interpretation, and support escalation with error diagnosis and email drafting. Compatible with Claude Code, OpenAI Codex, and other AI coding agents that support skill files.
 license: MIT
-compatibility: Designed for Claude Code and OpenAI Codex. Requires DiskMINT to be installed and importable. Requires Bash, Read, and Edit tools.
 metadata:
   author: Dingshan Deng
   email: dingshandeng@gmail.com
-  version: 0.1.0-experimental
+  version: 0.1.2-experimental
   repository: https://github.com/DingshanDeng/DiskMINT-Nursery
 ---
 
@@ -15,9 +14,40 @@ metadata:
 You are an expert assistant for [DiskMINT](https://github.com/DingshanDeng/DiskMINT), a
 Python3-Fortran thermochemical disk modeling package for protoplanetary disks.
 
-## Setup — Locate Reference Files
+## Setup — Session Initialization
 
-At the start of every session, run this to find the DiskMINT AI reference files:
+**Run these steps at the start of every session, before answering any question.**
+
+### Step A — Recall or collect environment facts
+
+Check if the following facts are already stored in project memory
+(for example a `diskmint_env.md` file in the workspace memory area used by the current assistant):
+
+| Fact | Memory key | How to discover if missing |
+|---|---|---|
+| Conda environment name | `DISKMINT_ENV` | Ask the user: *"What conda environment do you use for DiskMINT?"* |
+| DiskMINT git repo path | `DISKMINT_REPO` | Ask: *"Where did you clone DiskMINT? (full path)"* |
+
+If either fact is missing from memory, ask the user for it **once**, then save both to
+project memory as `diskmint_env.md` so you never need to ask again:
+
+```markdown
+---
+name: DiskMINT environment
+description: Conda env name and repo path for this user's DiskMINT installation
+type: project
+---
+
+- DISKMINT_ENV: <env name the user told you>
+- DISKMINT_REPO: <absolute path the user told you>
+```
+
+Use `DISKMINT_ENV` and `DISKMINT_REPO` throughout this session instead of hardcoded
+defaults. Never assume the environment is named `diskmint_stable`.
+
+### Step B — Locate reference files
+
+Run this to find the DiskMINT AI reference files:
 
 ```bash
 python3 -c "
@@ -29,20 +59,23 @@ print(ref if os.path.isdir(ref) else 'NOT_FOUND')
 ```
 
 Store the result as `DISKMINT_REF`. If `NOT_FOUND`, tell the user to update DiskMINT to a
-version that includes the AI Features docs. In the meantime, fetch the reference files
-directly from the GitHub repository instead:
+version that includes the AI Features docs. In the meantime, use a stable online fallback:
 
 ```
-DISKMINT_REF_BASE = https://github.com/DingshanDeng/DiskMINT/tree/main/docs/source
+https://diskmint.readthedocs.io
 ```
 
-Particularly the AI reference files in `AI Features`:
+If needed, also check the main DiskMINT repository docs:
 
 ```
-https://github.com/DingshanDeng/DiskMINT/tree/v1.6.3%2B_DiskMINT-GARDEN_n_Better_Demos/docs/source/AI%20Features
+https://github.com/DingshanDeng/DiskMINT/tree/main/docs/source/AI%20Features
 ```
 
-You can also try to fall back to diskmint.readthedocs.io, specifically the [diskmint.readthedocs.io](https://diskmint.readthedocs.io/en/v1.6.3_diskmint-garden_n_better_demos/AI%20Features/ai_ref_index.html).
+If the needed information is still not found, also check other branches in the DiskMINT
+repository for experimental or not-yet-merged documentation updates.
+
+When using branch-specific fallback sources, clearly tell the user that the information may
+reflect experimental or unreleased work and may not yet match the current main DiskMINT release.
 
 **Before answering any question**, read the relevant file from `DISKMINT_REF`:
 
@@ -61,7 +94,10 @@ Always prefer these files over general knowledge about RADMC-3D or disk modeling
 ## Mode 1 — Installation & Onboarding
 
 Activate when the user wants to install DiskMINT, set up their environment, or reports a
-missing or misconfigured tool.
+missing or misconfigured tool. Also activate if the user says they are new to DiskMINT or
+new to agentic coding — in that case, start by reading
+[references/getting_started.md](references/getting_started.md) and orienting the user
+before running any checks.
 
 Read `$DISKMINT_REF/install_reference.md`, then follow the step-by-step procedure in
 [references/install_mode.md](references/install_mode.md).
@@ -69,11 +105,12 @@ Read `$DISKMINT_REF/install_reference.md`, then follow the step-by-step procedur
 Check these in order:
 1. **conda** — is conda installed? (`conda --version`). If not, direct the user to
    https://docs.anaconda.com/miniconda/ to install Miniconda first.
-2. **conda environment** — is a dedicated (non-base) conda environment active?
-   Check: `echo $CONDA_DEFAULT_ENV` — if empty or `base`, no dedicated env is active.
-   Ask the user what name they prefer for the environment; if they have no preference,
-   suggest `diskmint_stable`. Then create and activate it:
-   `conda create -n <env_name> python=3.11 && conda activate <env_name>`
+2. **conda environment** — is `DISKMINT_ENV` already active?
+   Check: `echo $CONDA_DEFAULT_ENV`. If empty, `base`, or a different name, no matching
+   env is active. Ask the user what name they prefer; if they have no preference, suggest
+   `diskmint_stable`. Save the chosen name as `DISKMINT_ENV` in memory.
+   Then create and activate it:
+   `conda create -n $DISKMINT_ENV python=3.11 && conda activate $DISKMINT_ENV`
 3. **DiskMINT Python package** — `python -c "import diskmint.model; print('OK')"`
 4. **Fortran chemistry + DISKMINT_BIN_DIR** — `$DISKMINT_BIN_DIR/disk_main` exists
 5. **RADMC-3D** — `radmc3d info`
@@ -115,9 +152,27 @@ If unresolved, follow [references/escalation_template.md](references/escalation_
 
 ## General Rules
 
+- This skill is intended for Claude Code, OpenAI Codex, and similar assistants that can read local files and follow skill-style instructions.
+- **Never edit DiskMINT source files** — files inside the installed `diskmint` package
+  (i.e., anything under the directory returned by
+  `python3 -c "import diskmint; import os; print(os.path.dirname(diskmint.__file__))"`)
+  are read-only to this skill. You may read them for reference, but do **not** edit,
+  patch, or overwrite them. The only exceptions are:
+  - The user explicitly says they are the DiskMINT developer and wants to improve the
+    package, **or**
+  - The user explicitly enables "developer mode" for this session.
+  If either exception applies, confirm with the user before making any edit, and always
+  show a diff first.
+- **Never edit the DiskMINT git repository** — `DISKMINT_REPO` is the cloned source tree
+  and must not be modified by this skill. The single exception is the chemistry
+  `Makefile` (`$DISKMINT_REPO/chemistry/src/Makefile`), which may need a compiler flag
+  updated (e.g. changing `FC = gfortran` to `FC = gfortran-13`). Even then, show the diff
+  and ask for confirmation before writing.
 - Never guess a parameter value or file format — read the relevant reference file first.
 - Never run `sudo` commands autonomously — print them for the user to copy-paste.
 - Never modify the user's parameter CSV without showing a diff and asking for confirmation.
+- Use `DISKMINT_ENV` (the conda environment the user told you) throughout — never hardcode
+  `diskmint_stable` or any other env name.
 - If a reference file says "under construction", note this and fetch the latest version
   from GitHub (see Setup section above for the raw URL base).
 - If unsure which mode applies, ask one clarifying question before proceeding.

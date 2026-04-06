@@ -1,5 +1,26 @@
 # Installation Mode — Step-by-Step Procedure
 
+## Step 0 — Collect environment facts (once per machine)
+
+Before running any install commands, make sure you have `DISKMINT_ENV` and `DISKMINT_REPO`
+in memory (see Setup → Step A in SKILL.md).
+
+If they are already saved, confirm them with the user:
+
+> "I'll use conda environment **`<DISKMINT_ENV>`** and DiskMINT repo at
+> **`<DISKMINT_REPO>`**. Is that correct?"
+
+If not saved yet, ask:
+
+1. *"What conda environment should I use for DiskMINT? (leave blank to create a new one
+   called `diskmint_stable`)"*
+2. *"Where is the DiskMINT git repository on this machine? (full path, e.g.
+   `/home/alice/repos/DiskMINT`)"*
+
+Save both answers to memory as `diskmint_env.md` before continuing.
+
+---
+
 ## Step 1 — Run the Checklist
 
 Run each command and report results as a status table:
@@ -59,7 +80,9 @@ which gfortran-13   # or gfortran-12, gfortran-11, gfortran-10 — whatever was 
 ```
 
 **Patch the Makefile** using the Edit tool — replace `FC = gfortran` with the versioned
-binary (e.g. `FC = gfortran-13`). Do not use sed.
+binary (e.g. `FC = gfortran-13`). Do not use sed. This is the **only** file in
+`DISKMINT_REPO` that this skill is permitted to edit; show the diff and confirm before
+writing.
 
 **Compile:**
 ```bash
