@@ -5,7 +5,7 @@ license: MIT
 metadata:
   author: Dingshan Deng
   email: dingshandeng@gmail.com
-  version: 0.1.2-experimental
+  version: 0.1.3-experimental
   repository: https://github.com/DingshanDeng/DiskMINT-Nursery
 ---
 
@@ -85,6 +85,7 @@ reflect experimental or unreleased work and may not yet match the current main D
 | Parameters / CSV setup | `parameters_reference.md` |
 | Pipeline / workflow | `workflow_reference.md` |
 | Output files / `.chem` columns | `output_format_reference.md` |
+| Output analysis / visualisation | `references/analysis_guide.md` |
 | Errors / crashes | `error_reference.md` |
 
 Always prefer these files over general knowledge about RADMC-3D or disk modeling if a question about DiskMINT is asked.
@@ -114,8 +115,9 @@ Check these in order:
 3. **DiskMINT Python package** — `python -c "import diskmint.model; print('OK')"`
 4. **Fortran chemistry + DISKMINT_BIN_DIR** — `$DISKMINT_BIN_DIR/disk_main` exists
 5. **RADMC-3D** — `radmc3d info`
-6. **gfortran 10+** — `gfortran --version`
-7. **optool** — `optool --version` (optional)
+6. **radmc3dPy** — `python3 -c "import radmc3dPy; print('OK')"` — required for SED analysis; lives inside the RADMC-3D repo at `radmc3d-2.0/python/radmc3dPy/`, install with `pip install -e /path/to/radmc3d-2.0/python/radmc3dPy`
+7. **gfortran 10+** — `gfortran --version`
+8. **optool** — `optool --version` (optional)
 
 ---
 
@@ -135,6 +137,10 @@ Read the relevant file from `DISKMINT_REF` (see table above), then:
 - **Reading output** → show how to load each file type in Python.
 - **`.chem` files** → four columns: `r[cm]`, `z[cm]`, `log10(H2 abundance)`,
   `log10(C18O abundance)`.
+- **Output analysis / visualisation** → read `references/analysis_guide.md` for the three
+  workflows: (1) thermal/density — `modelgrid.readData()` + gas reconstruction + surface
+  density; (2) SED — `radmc3dPy.analyze.readSpectrum()`; (3) chemistry — `utils.read_model()`
+  → `utils.name_modelpara()` → `utils.compute_emittinglayer()` → 4-panel plot.
 - **VHSE / convergence** → check `bool_VHSE`, grid resolution (`nr`, `ntheta`), photon
   count (`nphot`).
 

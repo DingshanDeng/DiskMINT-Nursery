@@ -30,6 +30,7 @@ python3 -c "import diskmint; print(diskmint.__version__)"
 echo $DISKMINT_BIN_DIR
 ls $DISKMINT_BIN_DIR/disk_main 2>/dev/null || echo "NOT FOUND"
 radmc3d info 2>/dev/null | head -3 || echo "NOT FOUND"
+python3 -c "import radmc3dPy; print('radmc3dPy OK')" 2>/dev/null || echo "NOT FOUND"
 which optool 2>/dev/null && optool --version || echo "NOT FOUND (optional)"
 gfortran --version 2>/dev/null | head -1 || echo "NOT FOUND"
 ```
@@ -40,6 +41,7 @@ gfortran --version 2>/dev/null | head -1 || echo "NOT FOUND"
 | DISKMINT_BIN_DIR | ✅ / ❌ | path |
 | chemistry binary (disk_main) | ✅ / ❌ | |
 | RADMC-3D | ✅ / ❌ | |
+| radmc3dPy | ✅ / ❌ | required for SED analysis |
 | optool | ✅ / ❌ | optional |
 | gfortran | ✅ / ❌ | version number |
 
@@ -111,6 +113,23 @@ cd radmc3d-2.0/src && make
 echo 'export PATH="$PATH:/your/path/to/radmc3d-2.0/bin"' >> ~/.zshrc
 source ~/.zshrc
 radmc3d info
+```
+
+### radmc3dPy (Python interface — required for SED analysis)
+
+The `radmc3dPy` package is already inside the RADMC-3D repository cloned above — no extra download needed. Install it into the active conda environment with:
+
+```bash
+pip install -e /your/path/to/radmc3d-2.0/python/radmc3dPy
+```
+
+Replace `/your/path/to/` with the actual clone path stored in memory as `RADMC3D_PATH` (or ask the user where they cloned RADMC-3D if unknown).
+
+**ARM Mac / Linux note:** radmc3dPy may warn about a missing Fortran Mie module on import — this is harmless, the Python fallback is used automatically.
+
+Verify:
+```bash
+python3 -c "import radmc3dPy; print('radmc3dPy OK')"
 ```
 
 ### optool (optional)
