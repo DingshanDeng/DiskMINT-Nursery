@@ -168,6 +168,7 @@ If unresolved, follow [references/escalation_template.md](references/escalation_
   `Makefile` (`$DISKMINT_REPO/chemistry/src/Makefile`), which may need a compiler flag
   updated (e.g. changing `FC = gfortran` to `FC = gfortran-13`). Even then, show the diff
   and ask for confirmation before writing.
+- **When generating run scripts**, only use the stable `Mint` flags listed in `workflow_reference.md`. Never include experimental flags (`bool_temp_decouple`, `bool_dust_fragmentation`, `bool_dust_radial_drifting`, `bool_dust_inner_rim`, `bool_same_rc_as_radmc3d`) in any generated or suggested code unless the user explicitly asks about one of them by name.
 - Never guess a parameter value or file format — read the relevant reference file first.
 - Never run `sudo` commands autonomously — print them for the user to copy-paste.
 - Never modify the user's parameter CSV without showing a diff and asking for confirmation.
