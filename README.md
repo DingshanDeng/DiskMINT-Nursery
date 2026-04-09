@@ -97,11 +97,14 @@ make uninstall
 
 ## Requirements
 
-- [DiskMINT](https://github.com/DingshanDeng/DiskMINT) installed on your machine
-- An code agent CLI, for example:
+- An code agent with a command line interface (CLI), for example:
   - [Claude Code](https://claude.ai/code)
   - [OpenAI Codex](https://developers.openai.com/codex/cli)
   - [GitHub Copilot CLI](https://github.com/features/copilot/cli)
+- Preferred: A integrated development environment (IDE) that can work well with the agent CLI, for example:
+  - [Visual Studio Code](https://code.visualstudio.com/)
+  - [JupyterLab](https://jupyter.org/install) with Jupyter AI extension (https://github.com/jupyterlab/jupyter-ai)
+  - [Cursor](https://www.cursor.com/)
 
 ---
 

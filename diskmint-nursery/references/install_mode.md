@@ -21,6 +21,72 @@ Save both answers to memory as `diskmint_env.md` before continuing.
 
 ---
 
+## Step 0.5 — Verify conda is installed and the environment is ready
+
+### Check conda
+
+```bash
+conda --version
+```
+
+- **If the command is not found:** conda is not installed.
+  Tell the user:
+
+  > "conda is not installed on this machine. DiskMINT requires a conda environment.
+  > Please install Miniconda first:
+  >
+  > 1. Go to https://docs.anaconda.com/miniconda/ and download the installer for your OS.
+  > 2. Run the installer and follow the prompts (no sudo needed for a user-level install).
+  > 3. Open a new terminal (or run `source ~/.zshrc` / `source ~/.bashrc`) so that `conda` is on your PATH.
+  > 4. Then restart this session and re-run the DiskMINT install check."
+  >
+  > **Stop here.** Do not proceed until the user confirms conda is available.
+
+- **If conda is found:** continue to the environment check below.
+
+### Check the conda environment
+
+```bash
+echo $CONDA_DEFAULT_ENV
+```
+
+- If the output matches `DISKMINT_ENV` → the correct environment is already active. Continue to Step 1.
+- If the output is empty, `base`, or a different name → the environment is not active.
+
+  **Check whether the environment already exists:**
+
+  ```bash
+  conda env list | grep "DISKMINT_ENV"
+  ```
+
+  - **Exists but not active:**
+    Tell the user:
+    > "The conda environment `<DISKMINT_ENV>` exists but is not active. Please run:
+    > ```bash
+    > conda activate <DISKMINT_ENV>
+    > ```
+    > then re-run the install check."
+    > **Stop here** until the user confirms the environment is active.
+
+  - **Does not exist yet:** Create it:
+    ```bash
+    conda create -n <DISKMINT_ENV> python=3.11 -y
+    ```
+    Then tell the user:
+    > "Environment `<DISKMINT_ENV>` created. Please activate it with:
+    > ```bash
+    > conda activate <DISKMINT_ENV>
+    > ```
+    > then re-run the install check."
+    > **Stop here** until the user confirms the environment is active.
+
+> **Why stop and wait?** `conda activate` modifies the shell session and cannot be run
+> reliably by the agent inside a subprocess. The user must run it in their own terminal.
+> All subsequent `pip install` and `python` commands must run inside the active conda
+> environment, so the environment must be confirmed active before proceeding.
+
+---
+
 ## Step 1 — Run the Checklist
 
 Run each command and report results as a status table:

@@ -5,7 +5,7 @@ license: MIT
 metadata:
   author: Dingshan Deng
   email: dingshandeng@gmail.com
-  version: 0.1.3-experimental
+  version: 0.1.5-experimental
   repository: https://github.com/DingshanDeng/DiskMINT-Nursery
 ---
 
@@ -129,8 +129,50 @@ interpreting output, or has questions about parameters, dust opacities, or chemi
 Read the relevant file from `DISKMINT_REF` (see table above), then:
 
 - **Parameter questions** → explain physical meaning, units, valid range, and interactions.
-- **New model setup** → walk through parameter CSV, dust opacity config, stellar spectrum,
-  and boolean flags (`bool_VHSE`, `bool_chemistry`, `bool_SED`, `bool_MakeDustKappa`).
+- **New model setup** → before generating any script, ask the user one question:
+  > "Are you new to DiskMINT, or are you comfortable reading and modifying Python scripts?"
+
+  Then route by answer:
+
+  **New user / first model:**
+  Use `DISKMINT_REPO` from memory to locate the simple example:
+  ```
+  $DISKMINT_REPO/examples/example_diskmint_models/example_simple_test_1ms_star/
+  ```
+  Then do the following for the user (do not just tell them to do it themselves):
+  1. Ask where they want to set up their first model (their working directory).
+     If they have no preference, suggest creating a folder called `my_first_diskmint_model/`
+     in their current directory.
+  2. Copy the entire example directory there:
+     ```bash
+     cp -r $DISKMINT_REPO/examples/example_diskmint_models/example_simple_test_1ms_star/ <working_dir>/
+     ```
+  3. Confirm the copy succeeded by listing the contents.
+  4. Generate the run commands and ask the user to run them — do not run DiskMINT
+     model code directly (see General Rules). Provide:
+     ```bash
+     conda activate <DISKMINT_ENV>
+     cd <working_dir>/example_simple_test_1ms_star
+     python 0-model_test_1Msolar.py 2>&1 | tee -a model_run.log
+     ```
+     Explain that `2>&1 | tee -a model_run.log` captures all output (stdout + stderr)
+     to `model_run.log` while still printing it live to the terminal, so the user can
+     watch progress and the log is always available for debugging.
+  5. After the user reports it finished (or if it crashed), read `model_run.log` and
+     flag any errors or warnings immediately.
+
+  If they want to customise it after a successful first run, walk them through the script
+  section-by-section (directories → parameter CSV → boolean flags → `Mint` object →
+  `exe.runmodel()`), explaining each block in plain language before touching any code.
+  Do **not** introduce `argparse`, helper functions, or a CLI interface at this stage.
+
+  **Experienced user / comfortable with Python:**
+  You may generate a more structured script with a CLI interface (`argparse`),
+  helper functions, and timestamped model names — similar in style to the advanced
+  example at `$DISKMINT_REPO/examples/example_diskmint_models/example_RULup/` or
+  to what an HPC batch workflow would look like.
+  Still walk through the key sections, but you can be brief and assume familiarity
+  with Python modules and command-line arguments.
 - **Dust opacity setup** → two paths: pre-computed DSHARP files from `/examples/`, or
   `wrapper_optool_opac()` in `examples/example_utils/diskmint_utils.py` for custom grains
   (default: DIANA standard — pyroxene + carbon, 25% porosity).
@@ -175,6 +217,16 @@ If unresolved, follow [references/escalation_template.md](references/escalation_
   updated (e.g. changing `FC = gfortran` to `FC = gfortran-13`). Even then, show the diff
   and ask for confirmation before writing.
 - **When generating run scripts**, only use the stable `Mint` flags listed in `workflow_reference.md`. Never include experimental flags (`bool_temp_decouple`, `bool_dust_fragmentation`, `bool_dust_radial_drifting`, `bool_dust_inner_rim`, `bool_same_rc_as_radmc3d`) in any generated or suggested code unless the user explicitly asks about one of them by name.
+- **Never run DiskMINT model code on the user's behalf.** Running a disk model can take
+  minutes to hours and must be supervised by the user. Instead, always print the exact
+  command(s) and wait for the user to run them and report back. This applies to any
+  `python <script>.py`, `exe.runmodel(...)`, or equivalent invocation. Always include
+  log capture in the suggested command:
+  ```bash
+  python <script>.py 2>&1 | tee -a <modelname>.log
+  ```
+  so that the full output (stdout + stderr) is preserved and you can read the log to
+  help debug if anything goes wrong.
 - Never guess a parameter value or file format — read the relevant reference file first.
 - Never run `sudo` commands autonomously — print them for the user to copy-paste.
 - Never modify the user's parameter CSV without showing a diff and asking for confirmation.
@@ -182,6 +234,12 @@ If unresolved, follow [references/escalation_template.md](references/escalation_
   `diskmint_stable` or any other env name.
 - If a reference file says "under construction", note this and fetch the latest version
   from GitHub (see Setup section above for the raw URL base).
+- If the user asks **"what can you do?"** or **"how do I use you?"**, give a brief
+  summary of the three modes and point them to the prepared prompt files:
+  - Installation & onboarding → `prompts/install_prompts.md` (P-I-1 through P-I-5)
+  - Runtime assistant → `prompts/assistant_prompts.md` (P-A-1 through P-A-10)
+  - Support escalation → `prompts/escalation_prompts.md` (P-E-1 through P-E-3)
+  Tell them to copy any prompt and paste it into the chat to get started.
 - If unsure which mode applies, ask one clarifying question before proceeding.
 - If an issue cannot be resolved after consulting all reference files and trying all
   suggested fixes, tell the user: "I was not able to resolve this. Please open an issue
