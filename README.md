@@ -14,7 +14,7 @@ DiskMINT-Nursery works the best with the command line interface (CLI).
 
 ---
 
-DiskMINT-Nursery is described inside the DiskMINT [Documentation](https://diskmint.readthedocs.io/en/latest/). Check the `AI Features` section in the documentation for more information.
+DiskMINT-Nursery is described inside the DiskMINT [Documentation](https://diskmint.readthedocs.io/en/latest/). Check the `ML & AI Assistant` section in the documentation for more information.
 
 ---
 
@@ -52,7 +52,7 @@ When something goes wrong, the skill diagnoses the error against a known error r
 
 ## Prepared Prompts
 
-A set of ready-to-use prompts for each feature is maintained in the [`prompts/`](prompts/) directory of this repository, and documented in the [DiskMINT AI Features documentation](https://diskmint.readthedocs.io/en/latest/AI%20Features/ai_ref_index.html).
+A set of ready-to-use prompts for each feature is maintained in the [`prompts/`](prompts/) directory of this repository, and documented in the [DiskMINT ML & AI Assistant documentation](https://diskmint.readthedocs.io/en/latest/AI%20Features/ai_ref_index.html).
 
 | Prompt file | Feature |
 |---|---|
@@ -112,7 +112,7 @@ make uninstall
 
 - DiskMINT repository: https://github.com/DingshanDeng/DiskMINT
 - DiskMINT documentation: https://diskmint.readthedocs.io
-- AI Features documentation: https://diskmint.readthedocs.io/en/latest/AI%20Features/ai_ref_index.html
+- ML & AI Assistant documentation: https://diskmint.readthedocs.io/en/latest/AI%20Features/ai_ref_index.html
 - Issues & feedback: https://github.com/DingshanDeng/DiskMINT-Nursery/issues
 
 ---
