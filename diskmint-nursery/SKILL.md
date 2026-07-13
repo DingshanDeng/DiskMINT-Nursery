@@ -5,7 +5,7 @@ license: MIT
 metadata:
   author: Dingshan Deng
   email: dingshandeng@gmail.com
-  version: 0.1.5-experimental
+  version: 0.2.0
   repository: https://github.com/DingshanDeng/DiskMINT-Nursery
 ---
 
@@ -53,13 +53,13 @@ Run this to find the DiskMINT AI reference files:
 python3 -c "
 import diskmint, os
 base = os.path.dirname(os.path.dirname(diskmint.__file__))
-ref = os.path.join(base, 'docs', 'source', 'AI Features')
+ref = os.path.join(base, 'docs', 'source', 'ai_features')
 print(ref if os.path.isdir(ref) else 'NOT_FOUND')
 "
 ```
 
 Store the result as `DISKMINT_REF`. If `NOT_FOUND`, tell the user to update DiskMINT to a
-version that includes the AI Features docs. In the meantime, use a stable online fallback:
+version that includes the `ai_features` docs. In the meantime, use a stable online fallback:
 
 ```
 https://diskmint.readthedocs.io
@@ -68,7 +68,7 @@ https://diskmint.readthedocs.io
 If needed, also check the main DiskMINT repository docs:
 
 ```
-https://github.com/DingshanDeng/DiskMINT/tree/main/docs/source/AI%20Features
+https://github.com/DingshanDeng/DiskMINT/tree/main/docs/source/ai_features
 ```
 
 If the needed information is still not found, also check other branches in the DiskMINT
@@ -86,6 +86,7 @@ reflect experimental or unreleased work and may not yet match the current main D
 | Pipeline / workflow | `workflow_reference.md` |
 | Output files / `.chem` columns | `output_format_reference.md` |
 | Output analysis / visualisation | `references/analysis_guide.md` |
+| GARDEN / ML inference from observed fluxes | `references/garden_reference.md` |
 | Errors / crashes | `error_reference.md` |
 
 Always prefer these files over general knowledge about RADMC-3D or disk modeling if a question about DiskMINT is asked.
@@ -198,6 +199,30 @@ If unresolved, follow [references/escalation_template.md](references/escalation_
 
 ---
 
+## Mode 4 — DiskMINT-GARDEN ML Inference
+
+Activate when the user wants a fast estimate of disk gas mass, dust mass, gas-to-dust
+ratio, or characteristic radius from **observed** millimeter continuum and $\mathrm{C^{18}O}$
+flux measurements — not from running a full thermochemical model. Available since
+DiskMINT v1.7.0 via the optional `diskmint.garden` module.
+
+Read [references/garden_reference.md](references/garden_reference.md), then:
+
+- If `import diskmint.garden.infer` or a call into it raises an `ImportError` /
+  `GardenDependencyError`, the optional dependencies are missing — tell the user to run
+  `pip install "diskmint[garden]"`. This is separate from the core DiskMINT install and
+  does **not** require RADMC-3D, gfortran, or optool.
+- For a single target, use `infer.from_observations(...)`; for a table of targets, use
+  `infer.from_dataframe(...)`.
+- **Always report the domain-check fields** (`is_outside_grid`, `outside_features`,
+  `nn_dist`) alongside any prediction. If `is_outside_grid` is `True`, tell the user the
+  result is an extrapolation beyond the training grid and should not be treated as a
+  precise physical constraint.
+- Do not confuse this with Mode 2 — GARDEN never calls RADMC-3D or the chemistry network,
+  and none of Mode 1's install checks are prerequisites for using it.
+
+---
+
 ## General Rules
 
 - This skill is intended for Claude Code, OpenAI Codex, and similar assistants that can read local files and follow skill-style instructions.
@@ -235,10 +260,11 @@ If unresolved, follow [references/escalation_template.md](references/escalation_
 - If a reference file says "under construction", note this and fetch the latest version
   from GitHub (see Setup section above for the raw URL base).
 - If the user asks **"what can you do?"** or **"how do I use you?"**, give a brief
-  summary of the three modes and point them to the prepared prompt files:
+  summary of the four modes and point them to the prepared prompt files:
   - Installation & onboarding → `prompts/install_prompts.md` (P-I-1 through P-I-5)
   - Runtime assistant → `prompts/assistant_prompts.md` (P-A-1 through P-A-10)
   - Support escalation → `prompts/escalation_prompts.md` (P-E-1 through P-E-3)
+  - DiskMINT-GARDEN ML inference → `prompts/garden_prompts.md` (P-G-1 through P-G-3)
   Tell them to copy any prompt and paste it into the chat to get started.
 - If unsure which mode applies, ask one clarifying question before proceeding.
 - If an issue cannot be resolved after consulting all reference files and trying all

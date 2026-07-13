@@ -7,7 +7,7 @@ SKILL_ROOTS := $(CLAUDE_SKILL_ROOT) $(CODEX_SKILL_ROOT)
 
 all: check install
 
-## check: Verify DiskMINT is importable and AI Features docs exist
+## check: Verify DiskMINT is importable and ai_features docs exist
 check:
 	@echo "--- Checking DiskMINT installation ---"
 	@python3 -c "import diskmint" 2>/dev/null \
@@ -16,12 +16,12 @@ check:
 		    echo "       https://github.com/DingshanDeng/DiskMINT"; exit 1)
 	@python3 -c "\
 import diskmint, os; \
-ref = os.path.join(os.path.dirname(os.path.dirname(diskmint.__file__)), 'docs', 'source', 'AI Features'); \
+ref = os.path.join(os.path.dirname(os.path.dirname(diskmint.__file__)), 'docs', 'source', 'ai_features'); \
 exit(0) if os.path.isdir(ref) else exit(1)" 2>/dev/null \
-		&& echo "[OK] AI Features docs found" \
-		|| (echo "[WARN] AI Features docs not found in your DiskMINT install."; \
+		&& echo "[OK] ai_features docs found" \
+		|| (echo "[WARN] ai_features docs not found in your DiskMINT install."; \
 		    echo "       The skill will still install but may not find reference files."; \
-		    echo "       Update DiskMINT to a version that includes AI Features docs.")
+		    echo "       Update DiskMINT to a version that includes the ai_features docs.")
 	@echo "--- Check done ---"
 
 ## install: Install the DiskMINT-Nursery skill into Claude Code and Codex skill directories

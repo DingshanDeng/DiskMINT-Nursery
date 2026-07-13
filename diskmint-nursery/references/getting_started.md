@@ -131,5 +131,5 @@ help, say: *"I am the DiskMINT developer — enable developer mode for this sess
 | OpenAI Codex CLI | https://github.com/openai/codex |
 | DiskMINT repository | https://github.com/DingshanDeng/DiskMINT |
 | DiskMINT documentation | https://diskmint.readthedocs.io |
-| DiskMINT AI Features docs | https://diskmint.readthedocs.io/en/latest/AI%20Features/ai_ref_index.html |
+| DiskMINT AI Features docs | https://diskmint.readthedocs.io/en/latest/ai_features/ai_ref_index.html |
 | DiskMINT-Nursery repository | https://github.com/DingshanDeng/DiskMINT-Nursery |

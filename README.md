@@ -2,9 +2,6 @@
 
 **An AI agent skill for [DiskMINT](https://github.com/DingshanDeng/DiskMINT) — helping users install, run, and understand thermochemical disk models.**
 
-> [!WARNING]
-> **DiskMINT-Nursery is in early development. All features listed below are experimental and subject to change.**
-
 DiskMINT-Nursery is a companion skill for AI agents such as [Claude Code](https://claude.ai/code) and [OpenAI Codex](https://developers.openai.com/codex/cli) that guides users through the full DiskMINT workflow — from first install to scientific results. It works by reading structured reference files from the DiskMINT documentation and using them to navigate and assist in the user's own project.
 
 DiskMINT-Nursery works the best with the command line interface (CLI).
@@ -21,7 +18,6 @@ DiskMINT-Nursery is described inside the DiskMINT [Documentation](https://diskmi
 ## Features
 
 ### 🌱 Feature 1 — Installation & Onboarding
-`Status: Experimental`
 
 The skill checks your environment for all required tools, installs what is missing (where no `sudo` is needed), and generates copy-paste commands for anything that requires elevated permissions. It also handles platform-specific issues such as gfortran version requirements and ARM Mac compatibility.
 
@@ -33,9 +29,8 @@ Checks and installs:
 - `DISKMINT_BIN_DIR` environment variable
 
 ### 🌿 Feature 2 — Runtime Assistant
-`Status: Experimental`
 
-The skill answers questions about DiskMINT, helps set up and run models, and interprets outputs. It reads the structured AI reference files from the [DiskMINT documentation](https://diskmint.readthedocs.io/en/latest/AI%20Features/ai_ref_index.html) to ground its answers in the actual code — parameters, file formats, pipeline steps, and known failure modes.
+The skill answers questions about DiskMINT, helps set up and run models, and interprets outputs. It reads the structured AI reference files from the [DiskMINT documentation](https://diskmint.readthedocs.io/en/latest/ai_features/ai_ref_index.html) to ground its answers in the actual code — parameters, file formats, pipeline steps, and known failure modes.
 
 Capabilities:
 - Explain and set up parameter CSV files for a new target
@@ -44,28 +39,34 @@ Capabilities:
 - Interpret model output files and `.chem` abundance grids
 
 ### 🍃 Feature 3 — Support Escalation
-`Status: Experimental`
 
 When something goes wrong, the skill diagnoses the error against a known error reference, suggests fixes, and — if the problem cannot be resolved automatically — guides the user to collect the right log files and drafts a support email to the DiskMINT author.
+
+### 🌻 Feature 4 — DiskMINT-GARDEN ML Inference
+
+The skill helps you get a fast estimate of disk gas mass, dust mass, gas-to-dust ratio, and characteristic radius directly from observed millimeter continuum and C18O fluxes — no full model run required. Available since DiskMINT v1.7.0.
+
+Capabilities:
+- Set up `diskmint.garden.infer.from_observations()` for a single target or `from_dataframe()` for a table of sources
+- Explain and install the optional `diskmint[garden]` dependencies
+- Always surface the grid-domain diagnostics (`is_outside_grid`, `outside_features`, `nn_dist`) so extrapolated predictions are never mistaken for in-domain ones
 
 ---
 
 ## Prepared Prompts
 
-A set of ready-to-use prompts for each feature is maintained in the [`prompts/`](prompts/) directory of this repository, and documented in the [DiskMINT ML & AI Assistant documentation](https://diskmint.readthedocs.io/en/latest/AI%20Features/ai_ref_index.html).
+A set of ready-to-use prompts for each feature is maintained in the [`prompts/`](prompts/) directory of this repository, and documented in the [DiskMINT ML & AI Assistant documentation](https://diskmint.readthedocs.io/en/latest/ai_features/ai_ref_index.html).
 
 | Prompt file | Feature |
 |---|---|
 | [`prompts/install_prompts.md`](prompts/install_prompts.md) | Installation & onboarding |
 | [`prompts/assistant_prompts.md`](prompts/assistant_prompts.md) | Runtime assistant |
 | [`prompts/escalation_prompts.md`](prompts/escalation_prompts.md) | Support escalation |
+| [`prompts/garden_prompts.md`](prompts/garden_prompts.md) | DiskMINT-GARDEN ML inference |
 
 ---
 
 ## Installation
-
-> [!WARNING]
-> The skill is experimental. Install at your own discretion.
 
 ```bash
 git clone https://github.com/DingshanDeng/DiskMINT-Nursery.git
@@ -112,7 +113,7 @@ make uninstall
 
 - DiskMINT repository: https://github.com/DingshanDeng/DiskMINT
 - DiskMINT documentation: https://diskmint.readthedocs.io
-- ML & AI Assistant documentation: https://diskmint.readthedocs.io/en/latest/AI%20Features/ai_ref_index.html
+- ML & AI Assistant documentation: https://diskmint.readthedocs.io/en/latest/ai_features/ai_ref_index.html
 - Issues & feedback: https://github.com/DingshanDeng/DiskMINT-Nursery/issues
 
 ---
